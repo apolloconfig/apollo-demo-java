@@ -1,0 +1,62 @@
+/*
+ * Copyright 2022 Apollo Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+package com.apolloconfig.apollo.demo.springboot;
+
+import com.apolloconfig.apollo.demo.springboot.bean.AnnotatedBean;
+import com.apolloconfig.apollo.demo.springboot.config.SampleRedisConfig;
+import com.google.common.base.Charsets;
+import com.google.common.base.Strings;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ApplicationContext;
+
+@SpringBootApplication
+public class SpringBootSampleApplication {
+
+  public static void main(String[] args) throws IOException {
+    ApplicationContext context = new SpringApplicationBuilder(
+        SpringBootSampleApplication.class).run(args);
+    AnnotatedBean annotatedBean = context.getBean(AnnotatedBean.class);
+    SampleRedisConfig redisConfig = null;
+    try {
+      redisConfig = context.getBean(SampleRedisConfig.class);
+    } catch (NoSuchBeanDefinitionException ex) {
+      System.out.println(
+          "SampleRedisConfig is null, 'redis.cache.enabled' must have been set to false.");
+    }
+
+    System.out.println(
+        "SpringBootSampleApplication Demo. Input any key except quit to print the values. Input quit to exit.");
+    while (true) {
+      System.out.print("> ");
+      String input = new BufferedReader(
+          new InputStreamReader(System.in, Charsets.UTF_8)).readLine();
+      if (!Strings.isNullOrEmpty(input) && input.trim().equalsIgnoreCase("quit")) {
+        System.exit(0);
+      }
+
+      System.out.println(annotatedBean);
+      if (redisConfig != null) {
+        System.out.println(redisConfig);
+      }
+    }
+  }
+}
