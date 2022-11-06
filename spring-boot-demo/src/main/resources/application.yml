@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 apollo:
-  meta: http://106.54.227.205:8080
+  meta: http://81.68.181.139:8080
   bootstrap:
     enabled: true
     eagerLoad:
