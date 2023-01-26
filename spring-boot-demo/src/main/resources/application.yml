@@ -21,3 +21,5 @@ apollo:
       enabled: true
     # will inject 'application' and 'TEST1.apollo' namespaces in bootstrap phase
     namespaces: application,TEST1.apollo,application.yaml
+
+listeners: "application,TEST1.apollo,application.yaml"

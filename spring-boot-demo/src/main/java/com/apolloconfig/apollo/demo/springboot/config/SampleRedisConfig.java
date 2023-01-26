@@ -20,9 +20,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -67,7 +67,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "redis.cache")
 @Component("sampleRedisConfig")
 @RefreshScope
-public class SampleRedisConfig {
+public class SampleRedisConfig implements InitializingBean {
 
   private static final Logger logger = LoggerFactory.getLogger(SampleRedisConfig.class);
 
@@ -78,8 +78,8 @@ public class SampleRedisConfig {
   private Map<String, String> someMap = Maps.newLinkedHashMap();
   private List<String> someList = Lists.newLinkedList();
 
-  @PostConstruct
-  private void initialize() {
+  @Override
+  public void afterPropertiesSet() throws Exception {
     logger.info(
         "SampleRedisConfig initialized - expireSeconds: {}, clusterNodes: {}, commandTimeout: {}, someMap: {}, someList: {}",
         expireSeconds, clusterNodes, commandTimeout, someMap, someList);

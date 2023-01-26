@@ -15,7 +15,7 @@
   </modules>
 
   <properties>
-    <apollo.version>2.0.1</apollo.version>
+    <apollo.version>2.1.0</apollo.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.8</java.version>
   </properties>
@@ -30,17 +30,17 @@
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
-        <version>1.7.32</version>
+        <version>2.0.6</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>jcl-over-slf4j</artifactId>
-        <version>1.7.32</version>
+        <version>2.0.6</version>
       </dependency>
       <dependency>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-classic</artifactId>
-        <version>1.2.11</version>
+        <version>1.4.5</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
