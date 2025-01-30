@@ -18,10 +18,13 @@ package com.apolloconfig.apollo.demo.springboot.config;
 
 import com.apolloconfig.apollo.demo.springboot.bean.TestApplicationListener;
 import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
+import com.ctrip.framework.apollo.spring.annotation.MultipleConfig;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+@EnableApolloConfig(multipleConfigs = {
+    @MultipleConfig(appId = "100004459", namespaces = {"application"}, order = 9)})
 @Configuration
 public class AppConfig {
   @Bean

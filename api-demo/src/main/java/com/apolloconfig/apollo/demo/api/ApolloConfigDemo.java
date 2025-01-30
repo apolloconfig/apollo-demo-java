@@ -44,10 +44,11 @@ public class ApolloConfigDemo {
   private ConfigFile applicationConfigFile;
   private ConfigFile xmlConfigFile;
   private YamlConfigFile yamlConfigFile;
+  private Config anotherAppConfig;
 
   public ApolloConfigDemo() {
     ConfigChangeListener changeListener = changeEvent -> {
-      logger.info("Changes for namespace {}", changeEvent.getNamespace());
+      logger.info("Changes for app {} namespace {}", changeEvent.getAppId(), changeEvent.getNamespace());
       for (String key : changeEvent.changedKeys()) {
         ConfigChange change = changeEvent.getChange(key);
         logger.info("Change - key: {}, oldValue: {}, newValue: {}, changeType: {}",
@@ -57,6 +58,8 @@ public class ApolloConfigDemo {
     };
     config = ConfigService.getAppConfig();
     config.addChangeListener(changeListener);
+    anotherAppConfig = ConfigService.getConfig("100004459", "application");
+    anotherAppConfig.addChangeListener(changeListener);
     yamlConfig = ConfigService.getConfig("application.yaml");
     yamlConfig.addChangeListener(changeListener);
     publicConfig = ConfigService.getConfig("TEST1.apollo");
@@ -77,6 +80,9 @@ public class ApolloConfigDemo {
 
   private String getConfig(String key) {
     String result = config.getProperty(key, DEFAULT_VALUE);
+    if (DEFAULT_VALUE.equals(result)) {
+      result = anotherAppConfig.getProperty(key, DEFAULT_VALUE);
+    }
     if (DEFAULT_VALUE.equals(result)) {
       result = publicConfig.getProperty(key, DEFAULT_VALUE);
     }

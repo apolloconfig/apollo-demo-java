@@ -16,6 +16,10 @@
  */
 package com.apolloconfig.apollo.demo.springboot.bean;
 
+import com.ctrip.framework.apollo.Config;
+import com.ctrip.framework.apollo.model.ConfigChangeEvent;
+import com.ctrip.framework.apollo.spring.annotation.ApolloConfig;
+import com.ctrip.framework.apollo.spring.annotation.ApolloConfigChangeListener;
 import com.ctrip.framework.apollo.spring.annotation.ApolloJsonValue;
 
 import java.util.Date;
@@ -33,6 +37,12 @@ public class AnnotatedBean {
   private int timeout;
   private int batch;
   private List<JsonBean> jsonBeans;
+  @Value("${timeout2:200}")
+  private int timeout2;
+  @Value("${timeout3:200}")
+  private int timeout3;
+  @ApolloConfig(appId = "100004459")
+  private Config anotherAppConfig;
 
   /**
    * ApolloJsonValue annotated on fields example, the default value is specified as empty list - []
@@ -63,10 +73,21 @@ public class AnnotatedBean {
     this.jsonBeans = jsonBeans;
   }
 
+  @ApolloConfigChangeListener(appId = "100004459")
+  public void testChange(ConfigChangeEvent configChangeEvent) {
+    logger.info("Changes for appId {} namespace {}", configChangeEvent.getAppId(), configChangeEvent.getNamespace());
+    for (String key : configChangeEvent.changedKeys()) {
+      logger.info("Change - key: {}, oldValue: {}, newValue: {}, changeType: {}", key,
+          configChangeEvent.getChange(key).getOldValue(), anotherAppConfig.getProperty(key, null),
+          configChangeEvent.getChange(key).getChangeType());
+    }
+  }
+
   @Override
   public String toString() {
-    return String.format("[AnnotatedBean] timeout: %d, batch: %d, jsonBeans: %s", timeout, batch,
-        jsonBeans);
+    return String.format(
+        "[AnnotatedBean] timeout: %d, timeout2: %d, timeout3: %d, batch: %d, jsonBeans: %s",
+        timeout, timeout2, timeout3, batch, jsonBeans);
   }
 
   private static class JsonBean {
